@@ -26,7 +26,7 @@ class MovieTableViewCell: UITableViewCell {
         titleLabel?.text = movie.title
         overviewLabel?.text = movie.overview
         if let poster = movie.posterPath {
-            posterImageView.loadImageFromUrlString(urlString: Constant.PosterImagePrefix + poster)
+            posterImageView.loadImage(urlString: Constant.PosterImagePrefix + poster)
         } else {
             posterImageView.showUnavailableImage()
         }
