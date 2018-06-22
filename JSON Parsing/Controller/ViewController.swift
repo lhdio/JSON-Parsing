@@ -2,76 +2,100 @@
 //  ViewController.swift
 //  JSON Parsing
 //
-//  Created by BS-195 on 4/17/18.
+//  Created by Raju on 4/17/18.
 //  Copyright © 2018 rajubd49. All rights reserved.
 //
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
+
+    var moviesTask: URLSessionDataTask!
+    var errorHandler = ErrorHandler()
 
     @IBOutlet weak var tableView: UITableView!
-    var courses = [Course]()
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    var movies: [Movie] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.tableFooterView = UIView(frame: .zero)
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.title = "Course List"
-        // Parse JSON
-        parseJSON()
+        navigationItem.title = "Movie List"
+        errorHandler.viewController = self
+        loadMovies()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    fileprivate func parseJSON() {
-        
-        let urlString = "https://api.letsbuildthatapp.com/jsondecodable/website_description"
-        guard let url = URL(string: urlString) else {return}
-        
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            DispatchQueue.main.async {
-                guard let data = data else {return}
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase // Swift 4.1
-                    let websiteDescription = try decoder.decode(WebsiteDescription.self, from: data)
-                    print(websiteDescription.name,websiteDescription.description)
-                    self.courses = websiteDescription.courses
-                    self.tableView.reloadData()
-                    
-                    /* Swift 2, 3
-                     let dataAsString = String(data: data, encoding: .utf8)
-                     guard let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] else { return }
-                     
-                     let websiteDescription = WebsiteDescription(json: json)
-                     print(websiteDescription.name)
-                     */
-                } catch let jsonError {
-                    print("Error decoding JSON: \(jsonError)")
-                }
-            }
-        }.resume()
-        
+    @IBAction func refreshAction(_ sender: Any) {
+        loadMovies()
     }
     
-    // TableView
+    private func loadMovies() {
+        moviesTask?.cancel()
+        
+        activityIndicator.startAnimating()
+                
+        WebServiceClient.sharedInstance.fetchData(urlString: Constant.MovieListURL) { [weak self] (movieResponse: MovieResponse?, error: WebServiceError?) in
+            guard let controller = self else { return }
+
+            DispatchQueue.main.async {
+                controller.activityIndicator.stopAnimating()
+                
+                if let movies = movieResponse?.results {
+                    controller.movies = movies
+                } else if let error = error {
+                    self?.errorHandler.handleError(error)
+                }
+            }
+        }
+    }
     
+    private func showErrorAlert(with message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(okAction)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func handleError(_ error: WebServiceError) {
+        switch error {
+        case .noInternetConnection:
+            showErrorAlert(with: "The internet connection is lost")
+        case .fetchFailed:
+            showErrorAlert(with: "Failed to fetch data")
+        case .decodeFailed:
+            showErrorAlert(with: "Failed to decode json")
+        case .other:
+            showErrorAlert(with: "Unfortunately something went wrong")
+        }
+    }
+
+}
+
+extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.courses.count
+        return self.movies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "CellID")
-        let course = self.courses[indexPath.row]
-        cell.textLabel?.text = course.name
-        cell.detailTextLabel?.text = course.link//String(course.numberOfLessons)
         
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constant.CELL_ID, for: indexPath) as! MovieTableViewCell
+        let movie = self.movies[indexPath.row]
+        cell.setMovie(movie: movie)
         return cell
     }
-
-
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
 }
 

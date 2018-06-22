@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  JSON Parsing
 //
-//  Created by BS-195 on 4/17/18.
+//  Created by Raju on 4/17/18.
 //  Copyright © 2018 rajubd49. All rights reserved.
 //
 
