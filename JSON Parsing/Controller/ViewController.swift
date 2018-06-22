@@ -58,26 +58,6 @@ class ViewController: UIViewController {
             }
         }
     }
-    
-    private func showErrorAlert(with message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(okAction)
-        present(alert, animated: true, completion: nil)
-    }
-    
-    private func handleError(_ error: WebServiceError) {
-        switch error {
-        case .noInternetConnection:
-            showErrorAlert(with: "The internet connection is lost")
-        case .fetchFailed:
-            showErrorAlert(with: "Failed to fetch data")
-        case .decodeFailed:
-            showErrorAlert(with: "Failed to decode json")
-        case .other:
-            showErrorAlert(with: "Unfortunately something went wrong")
-        }
-    }
 
 }
 
