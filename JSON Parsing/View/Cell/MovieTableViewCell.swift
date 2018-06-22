@@ -26,26 +26,10 @@ class MovieTableViewCell: UITableViewCell {
         titleLabel?.text = movie.title
         overviewLabel?.text = movie.overview
         if let poster = movie.posterPath {
-            posterImageView?.loadImageFromUrlString(urlString: Constant.PosterImagePrefix + poster)
+            posterImageView.loadImageFromUrlString(urlString: Constant.PosterImagePrefix + poster)
         } else {
-            posterImageView?.image = UIImage(named: "unavailable.png")
+            posterImageView.showUnavailableImage()
         }
     }
 
-}
-
-extension UIImageView {
-    func loadImageFromUrlString(urlString: String) {
-        if let url = URL(string: urlString) {
-            DispatchQueue.global().async { [weak self] in
-                if let data = try? Data(contentsOf: url) {
-                    if let image = UIImage(data: data) {
-                        DispatchQueue.main.async {
-                            self?.image = image
-                        }
-                    }
-                }
-            }
-        }
-    }
 }

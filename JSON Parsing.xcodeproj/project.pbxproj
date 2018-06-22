@@ -16,6 +16,7 @@
 		813A15522085FD73005B2367 /* JSON_ParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813A15512085FD73005B2367 /* JSON_ParsingTests.swift */; };
 		813A155D2085FD73005B2367 /* JSON_ParsingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813A155C2085FD73005B2367 /* JSON_ParsingUITests.swift */; };
 		8180BBE720DCFC110062918E /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8180BBE620DCFC110062918E /* ErrorHandler.swift */; };
+		8180BBEA20DD04520062918E /* ImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8180BBE920DD04520062918E /* ImageExtension.swift */; };
 		818730CC20BFF51C00055AF5 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818730CB20BFF51C00055AF5 /* Movie.swift */; };
 		81BC42A9208609A400CC49D3 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 81BC42A8208609A400CC49D3 /* Info.plist */; };
 		81FE8A5020CA7FE400BA6105 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FE8A4E20CA7FE400BA6105 /* Reachability.swift */; };
@@ -56,6 +57,7 @@
 		813A155C2085FD73005B2367 /* JSON_ParsingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSON_ParsingUITests.swift; sourceTree = "<group>"; };
 		813A155E2085FD73005B2367 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8180BBE620DCFC110062918E /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
+		8180BBE920DD04520062918E /* ImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageExtension.swift; sourceTree = "<group>"; };
 		818730CB20BFF51C00055AF5 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		81BC42A8208609A400CC49D3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = "JSON Parsing/Info.plist"; sourceTree = "<group>"; };
 		81FE8A4E20CA7FE400BA6105 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 			children = (
 				81FE8A6520CAA9AD00BA6105 /* Constant.swift */,
 				8180BBE620DCFC110062918E /* ErrorHandler.swift */,
+				8180BBE920DD04520062918E /* ImageExtension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 			files = (
 				812D3FDC20C55045001983EE /* MovieTableViewCell.swift in Sources */,
 				818730CC20BFF51C00055AF5 /* Movie.swift in Sources */,
+				8180BBEA20DD04520062918E /* ImageExtension.swift in Sources */,
 				81FE8A5020CA7FE400BA6105 /* Reachability.swift in Sources */,
 				81FE8A6620CAA9AD00BA6105 /* Constant.swift in Sources */,
 				813A153F2085FD6D005B2367 /* ViewController.swift in Sources */,
