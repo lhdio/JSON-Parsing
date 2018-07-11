@@ -11,7 +11,7 @@ import UIKit
 
 class ErrorHandler: NSObject {
 
-    var viewController: ViewController?
+    var viewController: MoviesController?
     
     private func showErrorAlert(with message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)

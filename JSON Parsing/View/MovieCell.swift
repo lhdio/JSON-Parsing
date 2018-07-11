@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MovieTableViewCell: UITableViewCell {
+class MovieCell: UITableViewCell {
 
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -22,14 +22,16 @@ class MovieTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func setMovie(movie: Movie) {
-        titleLabel?.text = movie.title
-        overviewLabel?.text = movie.overview
-        if let poster = movie.posterPath {
-            posterImageView.loadImage(urlString: Constant.PosterImagePrefix + poster)
-        } else {
-            posterImageView.showUnavailableImage()
+    var movieViewModel: MovieViewModel! {
+        didSet{
+            titleLabel?.text = movieViewModel.title
+            overviewLabel?.text = movieViewModel.overview
+            if let posterImageUrl = movieViewModel.posterImageUrl {
+                posterImageView.loadImage(urlString:posterImageUrl)
+            } else {
+                posterImageView.showUnavailableImage()
+            }
+
         }
     }
-
 }

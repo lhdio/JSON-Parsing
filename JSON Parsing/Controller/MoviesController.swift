@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MoviesController.swift
 //  JSON Parsing
 //
 //  Created by Raju on 4/17/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MoviesController: UIViewController {
 
     var moviesTask: URLSessionDataTask!
     var errorHandler = ErrorHandler()
@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var movies: [Movie] = [] {
+    var movieViewModels: [MovieViewModel] = [] {
         didSet {
             self.tableView.reloadData()
         }
@@ -24,10 +24,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.tableFooterView = UIView(frame: .zero)
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.title = "Movie List"
-        errorHandler.viewController = self
+        initialSetup()
         loadMovies()
     }
 
@@ -35,8 +32,11 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    @IBAction func refreshAction(_ sender: Any) {
-        loadMovies()
+    fileprivate func initialSetup() {
+        tableView.tableFooterView = UIView(frame: .zero)
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.title = "Movie List"
+        errorHandler.viewController = self
     }
     
     private func loadMovies() {
@@ -51,26 +51,29 @@ class ViewController: UIViewController {
                 controller.activityIndicator.stopAnimating()
                 
                 if let movies = movieResponse?.results {
-                    controller.movies = movies
+                    controller.movieViewModels = movies.map({ return MovieViewModel(movie: $0)})
                 } else if let error = error {
-                    self?.errorHandler.handleError(error)
+                    controller.errorHandler.handleError(error)
                 }
             }
         }
     }
-
+    
+    @IBAction func refreshAction(_ sender: Any) {
+        loadMovies()
+    }
 }
 
-extension ViewController: UITableViewDataSource {
+extension MoviesController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.movies.count
+        return self.movieViewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constant.CELL_ID, for: indexPath) as! MovieTableViewCell
-        let movie = self.movies[indexPath.row]
-        cell.setMovie(movie: movie)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constant.CELL_ID, for: indexPath) as! MovieCell
+        let movieViewModel = movieViewModels[indexPath.row]
+        cell.movieViewModel = movieViewModel
         return cell
     }
     
