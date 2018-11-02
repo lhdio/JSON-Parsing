@@ -26,6 +26,11 @@ class MoviesController: UIViewController {
         super.viewDidLoad()
         initialSetup()
         loadMovies()
+//        Instead of this
+//        let movieCellNib = UINib(nibName: Constant.CELL_ID, bundle: nil)
+//        tableView.register(movieCellNib, forCellReuseIdentifier: Constant.CELL_ID)
+//        Use this with the help of Protocol
+        //tableView.register(MovieCell)// To register a cell, which we don't need now
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,7 +76,10 @@ extension MoviesController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constant.CELL_ID, for: indexPath) as! MovieCell
+        //Instead of this
+        //let cell = tableView.dequeueReusableCell(withIdentifier: Constant.CELL_ID, for: indexPath) as! MovieCell
+        //Use this with the help of Protocol
+        let cell = tableView.dequeueReusableCell(for: indexPath) as MovieCell
         let movieViewModel = movieViewModels[indexPath.row]
         cell.movieViewModel = movieViewModel
         return cell
