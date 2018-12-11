@@ -12,30 +12,29 @@ struct WebServiceClient {
     
     static let sharedInstance = WebServiceClient()
     
-    public func fetchData<T: Decodable>(urlString: String, completion: @escaping (T?, WebServiceError?) ->()) {
-        let url = URL(string: urlString)
-        URLSession.shared.dataTask(with: url!) { (data, resp, err) in
+    public func fetchData<T: Decodable>(urlRequest: URLRequest, completion: @escaping (T?, WebServiceError?) ->()) {
+  
+        URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
             
             if !Reachability.isConnectedToNetwork() {
-                completion(nil, .noInternetConnection)
+                completion(nil, .network)
             }
-            if let err = err {
-                print("Failed to fetch data:", err)
-                completion(nil, .fetchFailed)
+            if error != nil {
+                completion(nil, .fetch)
             }
-            
-            guard let data = data else { return }
-            
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.hasSuccessStatusCode, let data = data  else {
+                completion(nil, .fetch)
+                return
+            }
+        
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let obj = try decoder.decode(T.self, from: data)
-                completion(obj, nil)
-            } catch let jsonErr {
-                print("Failed to decode json:", jsonErr)
-                completion(nil, .decodeFailed)
+                let decodedResponse = try decoder.decode(T.self, from: data)
+                completion(decodedResponse, nil)
+            } catch _ {
+                completion(nil, .decode)
             }
         }.resume()
     }
-    
 }

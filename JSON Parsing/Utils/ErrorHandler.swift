@@ -21,15 +21,6 @@ class ErrorHandler: NSObject {
     }
     
     func handleError(_ error: WebServiceError) {
-        switch error {
-        case .noInternetConnection:
-            showErrorAlert(with: "The internet connection is lost")
-        case .fetchFailed:
-            showErrorAlert(with: "Failed to fetch data")
-        case .decodeFailed:
-            showErrorAlert(with: "Failed to decode json")
-        case .other:
-            showErrorAlert(with: "Unfortunately something went wrong")
-        }
+        showErrorAlert(with: error.reason)
     }
 }

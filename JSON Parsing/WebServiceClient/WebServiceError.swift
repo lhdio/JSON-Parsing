@@ -8,11 +8,24 @@
 
 import Foundation
 
-public enum WebServiceError: Error {
-    case noInternetConnection
-    case decodeFailed
-    case fetchFailed
+enum WebServiceError: Error {
+    case network
+    case fetch
+    case decode
     case other
+    
+    var reason: String {
+        switch self {
+        case .network:
+            return "The internet connection is lost"
+        case .fetch:
+            return"Failed to fetch data"
+        case .decode:
+            return "Failed to decode json"
+        case .other:
+            return "Unfortunately something went wrong"
+        }
+    }
 }
 
 

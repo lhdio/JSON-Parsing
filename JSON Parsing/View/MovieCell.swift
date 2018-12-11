@@ -17,21 +17,24 @@ class MovieCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        posterImageView.image = nil
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
-    var movieViewModel: MovieViewModel! {
-        didSet{
-            titleLabel?.text = movieViewModel.title
-            overviewLabel?.text = movieViewModel.overview
-            if let posterImageUrl = movieViewModel.posterImageUrl {
-                posterImageView.loadImage(urlString:posterImageUrl)
-            } else {
-                posterImageView.showUnavailableImage()
-            }
-
+    func configure(with movieViewModel: MovieViewModel?) {
+        guard let movieViewModel = movieViewModel else { return }
+        titleLabel?.text = movieViewModel.title
+        overviewLabel?.text = movieViewModel.overview
+        if let posterImageUrl = movieViewModel.posterImageUrl {
+            posterImageView.loadImage(urlString:posterImageUrl)
+        } else {
+            posterImageView.showUnavailableImage()
         }
     }
 }
